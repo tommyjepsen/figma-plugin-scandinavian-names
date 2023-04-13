@@ -1,19 +1,73 @@
 <link rel="stylesheet" href="style.css" />
 <script src="https://cdn.tailwindcss.com"></script>
-<div class="flex flex-col gap-4 p-4">
-  <div class="flex flex-row justify-between">
-    <h1 class="font-semibold">Figma Stats Tracker</h1>
 
-    <button>
+<div
+  class="flex flex-row gap-4 px-4 py-3 text-xs bg-gray-50 justify-between uppercase font-bold border-b"
+>
+  <button id="btn_navbar_tracking">YOUR TRACKING</button>
+  <button id="btn_navbar_sign_in">SIGN IN</button>
+  <button id="btn_navbar_create_acc">CREATE ACCOUNT</button>
+  <button id="btn_navbar_my_profile">MY PROFILE</button>
+  <button id="btn_navbar_sign_out">SIGN OUT</button>
+</div>
+<div class="flex flex-col gap-4 p-4 hidden" id="page_sign_in">
+  <p>Sign in</p>
+  <div class="flex flex-col">
+    <label class="text-xs font-bold">Email</label>
+    <input type="email" id="s_email" class="border px-2 py-1 rounded" />
+  </div>
+  <div class="flex flex-col">
+    <label class="text-xs font-bold">Password</label>
+    <input type="password" id="s_password" class="border px-2 py-1 rounded" />
+  </div>
+
+  <button
+    id="btn_sign_in"
+    class="bg-black rounded h-8 text-white text-xs font-bold"
+  >
+    Sign in
+  </button>
+</div>
+<div class="flex flex-col gap-4 p-4 hidden" id="page_create_account">
+  <p>Create an account</p>
+  <div class="flex flex-col">
+    <label class="text-xs font-bold">Email</label>
+    <input type="email" id="ca_email" class="border px-2 py-1 rounded" />
+  </div>
+  <div class="flex flex-col">
+    <label class="text-xs font-bold">Password</label>
+    <input type="password" id="ca_password" class="border px-2 py-1 rounded" />
+  </div>
+  <div class="flex flex-col">
+    <label class="text-xs font-bold">Name</label>
+    <input type="text" id="ca_name" class="border px-2 py-1 rounded" />
+  </div>
+  <button
+    id="btn_create_account"
+    class="bg-black rounded h-8 text-white text-xs font-bold"
+  >
+    Create account
+  </button>
+</div>
+<div class="flex flex-col gap-4 p-4" id="page_tracking">
+  <div class="flex flex-row gap-4">
+    <button
+      id="startpause"
+      class="bg-black flex-1 px-4 rounded h-10 text-white text-xs font-bold"
+    >
+      <span id="startpause_text">Start tracker</span>
+    </button>
+    <button
+      class="px-2 w-28 flex flex-row gap-2 items-center rounded h-10 text-black text-xs font-bold"
+      id="cloudsync"
+    >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
-        id="cloudsync"
         viewBox="0 0 24 24"
-        stroke-width="1.5"
-        style="display: none"
-        stroke="#ccc"
-        class="w-6 h-6"
+        stroke-width="1"
+        stroke="#000"
+        class="w-4 h-4"
       >
         <path
           stroke-linecap="round"
@@ -21,19 +75,17 @@
           d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z"
         />
       </svg>
+      <span id="text_sync_status">Synced</span>
     </button>
   </div>
   <div class="border border-b border-gray-100 w-full"></div>
-  <button
-    id="startpause"
-    class="bg-black rounded h-8 text-white text-xs font-bold"
-  >
-    <span id="startpause_text">Start tracker</span>
-  </button>
-  <div class="border border-b border-gray-100 w-full"></div>
   <p class="text-sm font-bold uppercase">TRACKED SINCE STARTED</p>
 
-  <div class="grid grid-cols-2 gap-4">
+  <div class="grid grid-cols-3 gap-4">
+    <div class="flex uppercase font-bold flex-col justify-between">
+      <p class="text-xs text-gray-500">Total</p>
+      <p class="text-2xl" id="TOTAL">0</p>
+    </div>
     <div class="flex uppercase font-bold flex-col justify-between">
       <p class="text-xs text-gray-500">Groups</p>
       <p class="text-2xl" id="GROUP">0</p>
@@ -42,8 +94,7 @@
       <p class="text-xs text-gray-500">Frames</p>
       <p class="text-2xl" id="FRAME">0</p>
     </div>
-  </div>
-  <div class="grid grid-cols-2 gap-4">
+
     <div class="flex uppercase font-bold flex-col justify-between">
       <p class="text-xs text-gray-500">Rectangles</p>
       <p class="text-2xl" id="RECTANGLE">0</p>
@@ -79,8 +130,12 @@
   </div>
 
   <div class="border border-b border-gray-100 w-full"></div>
-  <p class="text-sm font-bold uppercase">EXISTING ELEMENTS</p>
-  <div class="grid grid-cols-2 gap-4">
+  <p class="text-sm font-bold uppercase">EXISTING ELEMENTS ON TRACKING START</p>
+  <div class="grid grid-cols-3 gap-4">
+    <div class="flex uppercase font-bold flex-col justify-between">
+      <p class="text-xs text-gray-500">Total</p>
+      <p class="text-2xl" id="TOTAL_TOTAL">0</p>
+    </div>
     <div class="flex uppercase font-bold flex-col justify-between">
       <p class="text-xs text-gray-500">Groups</p>
       <p class="text-2xl" id="TOTAL_GROUP">0</p>
@@ -89,8 +144,6 @@
       <p class="text-xs text-gray-500">Frames</p>
       <p class="text-2xl" id="TOTAL_FRAME">0</p>
     </div>
-  </div>
-  <div class="grid grid-cols-2 gap-4">
     <div class="flex uppercase font-bold flex-col justify-between">
       <p class="text-xs text-gray-500">Rectangles</p>
       <p class="text-2xl" id="TOTAL_RECTANGLE">0</p>
@@ -130,15 +183,101 @@
   let hasUnsyncedData = false;
   let isStarted = false;
   let countDown = 10;
+  let token = "";
 
+  //Create acc
+  document.querySelector("#btn_create_account").onclick = () => {
+    const email = document.querySelector("#ca_email").value;
+    const password = document.querySelector("#ca_password").value;
+    const companyName = document.querySelector("#ca_name").value;
+    parent.postMessage(
+      {
+        pluginMessage: {
+          msg: "create_account",
+          email,
+          password,
+          companyName,
+        },
+      },
+      "*"
+    );
+  };
+
+  //Sign in
+  document.querySelector("#btn_sign_in").onclick = () => {
+    const email = document.querySelector("#s_email").value;
+    const password = document.querySelector("#s_password").value;
+    parent.postMessage(
+      {
+        pluginMessage: {
+          msg: "sign_in",
+          email,
+          password,
+        },
+      },
+      "*"
+    );
+  };
+
+  //NAVBAR
+  document.querySelector("#btn_navbar_tracking").onclick = () => {
+    onChangePage("tracking");
+  };
+  document.querySelector("#btn_navbar_sign_in").onclick = () => {
+    onChangePage("sign_in");
+  };
+  document.querySelector("#btn_navbar_create_acc").onclick = () => {
+    onChangePage("create_account");
+  };
+  document.querySelector("#btn_navbar_my_profile").onclick = () => {
+    onChangePage("my_profile");
+  };
+  document.querySelector("#btn_navbar_sign_out").onclick = () => {
+    parent.postMessage({ pluginMessage: { msg: "sign_out" } }, "*");
+  };
+
+  function onChangePage(page) {
+    if (page == "tracking") {
+      document.querySelector("#page_tracking").style.display = "flex";
+      document.querySelector("#page_sign_in").style.display = "none";
+      document.querySelector("#page_create_account").style.display = "none";
+      document.querySelector("#page_my_profile").style.display = "none";
+    } else if (page == "sign_in") {
+      document.querySelector("#page_tracking").style.display = "none";
+      document.querySelector("#page_sign_in").style.display = "flex";
+      document.querySelector("#page_create_account").style.display = "none";
+      document.querySelector("#page_my_profile").style.display = "none";
+    } else if (page == "create_account") {
+      document.querySelector("#page_tracking").style.display = "none";
+      document.querySelector("#page_sign_in").style.display = "none";
+      document.querySelector("#page_create_account").style.display = "flex";
+      document.querySelector("#page_my_profile").style.display = "none";
+    } else if (page == "my_profile") {
+      document.querySelector("#page_tracking").style.display = "none";
+      document.querySelector("#page_sign_in").style.display = "none";
+      document.querySelector("#page_create_account").style.display = "none";
+      document.querySelector("#page_my_profile").style.display = "flex";
+    }
+  }
+
+  //On loading
   document.addEventListener("DOMContentLoaded", () => {
-    document.querySelector("#figma_file_name").innerHTML = figma.root.name;
+    //Check if token exists
+    parent.postMessage(
+      {
+        pluginMessage: {
+          msg: "get_user_data",
+        },
+      },
+      "*"
+    );
   });
 
+  //Tracking 
   document.querySelector("#startpause").onclick = () => {
-    parent.postMessage({ pluginMessage: "start" }, "*");
+    parent.postMessage({ pluginMessage: { msg: "start" } }, "*");
     if (!isStarted) {
-      document.querySelector("#startpause_text").innerHTML = "Running...";
+      document.querySelector("#startpause_text").innerHTML = "Tracking...";
     } else {
       document.querySelector("#startpause_text").innerHTML = "Start tracker";
       document.querySelector("#startpause_countdown").innerHTML = "";
@@ -146,24 +285,39 @@
     isStarted = !isStarted;
   };
   document.querySelector("#cloudsync").onclick = () => {
-    parent.postMessage({ pluginMessage: "onsync" }, "*");
+    parent.postMessage({ pluginMessage: { msg: "onsync" } }, "*");
   };
 
   onmessage = (event) => {
     let message = event.data.pluginMessage;
-    console.log("message", message);
-    onSetStats(message.newNodes);
-    onSetAllStats(message.allNodes);
-    onSetUnsyncedData(message.hasUnsyncedData);
+    if (message.newNodes != null) {
+      onSetStats(message.newNodes);
+      onSetAllStats(message.allNodes);
+      onSetUnsyncedData(message.hasUnsyncedData);
+    }
+
+    if (message.token) {
+      token = message.token;
+      if (message.token != "invalid") {
+        document.querySelector("#btn_navbar_sign_in").style.display = "none";
+        document.querySelector("#btn_navbar_create_acc").style.display = "none";
+        document.querySelector("#btn_navbar_my_profile").style.display = "flex";
+        document.querySelector("#btn_navbar_sign_out").style.display = "flex";
+      } else {
+        document.querySelector("#btn_navbar_sign_in").style.display = "flex";
+        document.querySelector("#btn_navbar_create_acc").style.display = "flex";
+        document.querySelector("#btn_navbar_my_profile").style.display = "none";
+        document.querySelector("#btn_navbar_sign_out").style.display = "none";
+      }
+    }
   };
 
   function onSetUnsyncedData(_hasUnsyncedData) {
     hasUnsyncedData = _hasUnsyncedData;
-    console.log("onSetUnsyncedData", hasUnsyncedData);
     if (hasUnsyncedData) {
-      document.querySelector("#cloudsync").style.display = "flex";
+      document.querySelector("#text_sync_status").innerHTML = "Syncing...";
     } else {
-      document.querySelector("#cloudsync").style.display = "none";
+      document.querySelector("#text_sync_status").innerHTML = "Synced";
     }
   }
 
