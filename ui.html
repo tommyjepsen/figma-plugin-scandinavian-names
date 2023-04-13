@@ -1,16 +1,37 @@
 <link rel="stylesheet" href="style.css" />
 <script src="https://cdn.tailwindcss.com"></script>
 <div class="flex flex-col gap-4 p-4">
-  <h1 class="font-semibold">Figma Stats Tracker</h1>
+  <div class="flex flex-row justify-between">
+    <h1 class="font-semibold">Figma Stats Tracker</h1>
+
+    <button>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        id="cloudsync"
+        viewBox="0 0 24 24"
+        stroke-width="1.5"
+        style="display: none"
+        stroke="#ccc"
+        class="w-6 h-6"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z"
+        />
+      </svg>
+    </button>
+  </div>
   <div class="border border-b border-gray-100 w-full"></div>
   <button
     id="startpause"
     class="bg-black rounded h-8 text-white text-xs font-bold"
   >
-    Start tracker
+    <span id="startpause_text">Start tracker</span>
   </button>
   <div class="border border-b border-gray-100 w-full"></div>
-  <p class="text-sm font-bold uppercase">New</p>
+  <p class="text-sm font-bold uppercase">TRACKED SINCE STARTED</p>
 
   <div class="grid grid-cols-2 gap-4">
     <div class="flex uppercase font-bold flex-col justify-between">
@@ -58,7 +79,7 @@
   </div>
 
   <div class="border border-b border-gray-100 w-full"></div>
-  <p class="text-sm font-bold uppercase">Existing in file</p>
+  <p class="text-sm font-bold uppercase">EXISTING ELEMENTS</p>
   <div class="grid grid-cols-2 gap-4">
     <div class="flex uppercase font-bold flex-col justify-between">
       <p class="text-xs text-gray-500">Groups</p>
@@ -106,27 +127,48 @@
 </div>
 
 <script>
+  let hasUnsyncedData = false;
   let isStarted = false;
+  let countDown = 10;
+
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelector("#figma_file_name").innerHTML = figma.root.name;
+  });
 
   document.querySelector("#startpause").onclick = () => {
     parent.postMessage({ pluginMessage: "start" }, "*");
     if (!isStarted) {
-      document.querySelector("#startpause").innerHTML = "Running...";
+      document.querySelector("#startpause_text").innerHTML = "Running...";
     } else {
-      document.querySelector("#startpause").innerHTML = "Start tracker";
+      document.querySelector("#startpause_text").innerHTML = "Start tracker";
+      document.querySelector("#startpause_countdown").innerHTML = "";
     }
     isStarted = !isStarted;
+  };
+  document.querySelector("#cloudsync").onclick = () => {
+    parent.postMessage({ pluginMessage: "onsync" }, "*");
   };
 
   onmessage = (event) => {
     let message = event.data.pluginMessage;
-    onSetStats(message.nodes);
+    console.log("message", message);
+    onSetStats(message.newNodes);
     onSetAllStats(message.allNodes);
+    onSetUnsyncedData(message.hasUnsyncedData);
   };
+
+  function onSetUnsyncedData(_hasUnsyncedData) {
+    hasUnsyncedData = _hasUnsyncedData;
+    console.log("onSetUnsyncedData", hasUnsyncedData);
+    if (hasUnsyncedData) {
+      document.querySelector("#cloudsync").style.display = "flex";
+    } else {
+      document.querySelector("#cloudsync").style.display = "none";
+    }
+  }
 
   function onSetStats(nodes) {
     nodes.forEach((node) => {
-      console.log(node);
       var ele = document.querySelector("#" + node.type);
       if (ele) {
         ele.innerHTML = onFindAmount(nodes, node.type);
@@ -135,7 +177,6 @@
   }
   function onSetAllStats(nodes) {
     nodes.forEach((node) => {
-      console.log(node);
       var ele = document.querySelector("#TOTAL_" + node.type);
       if (ele) {
         ele.innerHTML = onFindAmount(nodes, node.type);
@@ -147,7 +188,7 @@
     let amount = 0;
     nodes.forEach((node) => {
       if (node.type === type) {
-        amount = node.amount;
+        amount = node.amount.toLocaleString();
       }
     });
     return amount;
