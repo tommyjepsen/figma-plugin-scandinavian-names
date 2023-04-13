@@ -1,0 +1,18 @@
+{
+  "name": "looperdopper",
+  "version": "1.0.0",
+  "description": "Loop elements",
+  "main": "code.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "watch": "npm run build -- --watch"
+  },
+  "author": "Tommy Jepsen",
+  "license": "",
+  "devDependencies": {
+    "@figma/plugin-typings": "^1.62.0",
+    "@types/node": "^18.15.11",
+    "typescript": "*"
+  },
+  "dependencies": {}
+}

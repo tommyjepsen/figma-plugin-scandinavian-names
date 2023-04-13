@@ -1,0 +1,70 @@
+<link rel="stylesheet" href="style.css" />
+<script src="https://cdn.tailwindcss.com"></script>
+<div class="flex flex-col gap-4 p-4 overflow-y-scroll">
+  <h1 class="font-semibold">Your Figma Stats</h1>
+  <div class="border border-b border-gray-100 w-full"></div>
+  <button id="startpause" class="bg-black rounded h-10 text-white">
+    Start tracker
+  </button>
+  <div class="border border-b border-gray-100 w-full"></div>
+  <div class="grid grid-cols-2 gap-4">
+    <div class="flex uppercase font-bold flex-col justify-between">
+      <p class="text-xs">Groups</p>
+      <p class="text-lg" id="GROUP">0</p>
+    </div>
+    <div class="flex uppercase font-bold flex-col justify-between">
+      <p class="text-xs">Frames</p>
+      <p class="text-lg" id="FRAME">0</p>
+    </div>
+  </div>
+  <div class="border border-b border-gray-100 w-full"></div>
+  <div class="grid grid-cols-2 gap-4">
+    <div class="flex uppercase font-bold flex-col justify-between">
+      <p class="text-xs">Rectangles</p>
+      <p class="text-lg" id="RECTANGLE">0</p>
+    </div>
+    <div class="flex uppercase font-bold flex-col justify-between">
+      <p class="text-xs">Ellipses</p>
+      <p class="text-lg" id="ELLIPSE">0</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  let isStarted = false;
+
+  document.querySelector("#startpause").onclick = () => {
+    parent.postMessage({ pluginMessage: "start" }, "*");
+    if (!isStarted) {
+      document.querySelector("#startpause").innerHTML = "Running...";
+    } else {
+      document.querySelector("#startpause").innerHTML = "Start tracker";
+    }
+    isStarted = !isStarted;
+  };
+
+  onmessage = (event) => {
+    let message = event.data.pluginMessage;
+    onSetStats(message.nodes);
+  };
+
+  function onSetStats(nodes) {
+    nodes.forEach((node) => {
+      console.log(node);
+      var ele = document.querySelector("#" + node.type);
+      if (ele) {
+        ele.innerHTML = onFindAmount(nodes, node.type);
+      }
+    });
+  }
+
+  function onFindAmount(nodes, type) {
+    let amount = 0;
+    nodes.forEach((node) => {
+      if (node.type === type) {
+        amount = node.amount;
+      }
+    });
+    return amount;
+  }
+</script>
