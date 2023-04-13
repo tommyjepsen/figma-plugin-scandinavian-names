@@ -48,7 +48,7 @@ const onChange = async () => {
   clearTimeout(debouncer);
   debouncer = setTimeout(async () => {
     await onSyncDataToCloud(newNodes);
-  }, 5000);
+  }, 10000);
 };
 
 const onSyncDataToCloud = async (newNodes: any[]) => {
