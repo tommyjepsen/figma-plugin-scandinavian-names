@@ -1,7 +1,7 @@
 {
-  "name": "looperdopper",
+  "name": "figmastatstracker",
   "version": "1.0.0",
-  "description": "Loop elements",
+  "description": "Track your Figma work",
   "main": "code.js",
   "scripts": {
     "build": "tsc -p tsconfig.json",

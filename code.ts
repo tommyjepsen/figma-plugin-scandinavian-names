@@ -2,7 +2,7 @@ let allNodes: any[] = [];
 let isStarted = false;
 var debouncer: any = null;
 
-figma.showUI(__html__, { width: 300, height: 400 });
+figma.showUI(__html__, { width: 350, height: 600 });
 
 const onCountNodes = () => {
   const nodes: any[] = [];
@@ -32,7 +32,7 @@ const onChange = () => {
     }
     return node;
   });
-  figma.ui.postMessage({ nodes });
+  figma.ui.postMessage({ nodes, allNodes });
 
   clearTimeout(debouncer);
   debouncer = setTimeout(async () => {
@@ -58,7 +58,12 @@ figma.on("documentchange", async () => {
 
 figma.ui.onmessage = async (params) => {
   allNodes = onCountNodes();
+  figma.ui.postMessage({ nodes: [], allNodes });
+
   isStarted = !isStarted;
+  if(isStarted) {
+    figma.notify('Started');
+  }
   // await figma.clientStorage.setAsync("key", "valuezz");
   // const ok = await figma.clientStorage.getAsync("key");
   // console.log("ok", ok);
