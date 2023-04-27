@@ -1,7 +1,7 @@
 {
-  "name": "scandinavian-names",
+  "name": "scandinavian-names-generator",
   "version": "1.0.0",
-  "description": "Generate random Scandinavian name and emails",
+  "description": "Generate random Scandinavian names, emails and companies",
   "main": "code.js",
   "scripts": {
     "build": "tsc -p tsconfig.json",
