@@ -1,7 +1,7 @@
 {
-  "name": "figmastatstracker",
+  "name": "scandinavian-names",
   "version": "1.0.0",
-  "description": "Track your Figma work",
+  "description": "Generate random Scandinavian name and emails",
   "main": "code.js",
   "scripts": {
     "build": "tsc -p tsconfig.json",

@@ -1,180 +1,578 @@
-let allNodes: any[] = [];
-let isStarted = false;
-var debouncer: any = null;
-let token: string = "invalid";
+figma.showUI(__html__, { width: 275, height: 535 });
 
-figma.showUI(__html__, { width: 350, height: 600 });
+const companies = [
+  {
+    name: "Acme Consulting A/S",
+    domain: "acmeconsulting.se",
+  },
+  {
+    name: "Global Logistics AS",
+    domain: "globallogistics.no",
+  },
+  {
+    name: "Bright Ideas AB",
+    domain: "brightideas.se",
+  },
+  {
+    name: "Tech Genius ApS",
+    domain: "techgenius.fi",
+  },
+  {
+    name: "Smart Office AB",
+    domain: "smartoffice.se",
+  },
+  {
+    name: "Future Foods AS",
+    domain: "futurefoods.no",
+  },
+  {
+    name: "Apple Tree A/S",
+    domain: "appletree.se",
+  },
+  {
+    name: "Sustainable Energy ApS",
+    domain: "sustainableenergy.no",
+  },
+  {
+    name: "Virtual Worlds AB",
+    domain: "virtualworlds.se",
+  },
+  {
+    name: "Innovative Healthcare AS",
+    domain: "innovativehealthcare.fi",
+  },
+  {
+    name: "Eco-Friendly Homes AB",
+    domain: "ecofriendlyhomes.se",
+  },
+  {
+    name: "Ocean Blue A/S",
+    domain: "oceanblue.no",
+  },
+  {
+    name: "Smart Tech AB",
+    domain: "smarttech.se",
+  },
+  {
+    name: "Urban Planning AS",
+    domain: "urbanplanning.no",
+  },
+  {
+    name: "Intelligent Transportation AB",
+    domain: "intelligenttransportation.se",
+  },
+  {
+    name: "Nordic Style AS",
+    domain: "nordicstyle.no",
+  },
+  {
+    name: "Savvy Investments AB",
+    domain: "savvyinvestments.se",
+  },
+  {
+    name: "Digital Solutions AS",
+    domain: "digitalsolutions.no",
+  },
+  {
+    name: "Green Energy AB",
+    domain: "greenenergy.se",
+  },
+  {
+    name: "Wellness Center AS",
+    domain: "wellnesscenter.no",
+  },
+  {
+    name: "Tech Revolution AB",
+    domain: "techrevolution.se",
+  },
+  {
+    name: "Bright Futures AS",
+    domain: "brightfutures.fi",
+  },
+  {
+    name: "CleanTech AB",
+    domain: "cleantech.se",
+  },
+  {
+    name: "Fashionista AS",
+    domain: "fashionista.no",
+  },
+  {
+    name: "Creative Industries AB",
+    domain: "creativeindustries.se",
+  },
+  {
+    name: "Travel Adventures AS",
+    domain: "traveladventures.fi",
+  },
+  {
+    name: "Wellness Lifestyle AB",
+    domain: "wellnesslifestyle.se",
+  },
+  {
+    name: "Future Cities AS",
+    domain: "futurecities.no",
+  },
+  {
+    name: "Smart Buildings AB",
+    domain: "smartbuildings.se",
+  },
+  {
+    name: "Green Business AS",
+    domain: "greenbusiness.fi",
+  },
+  {
+    name: "Digital Marketing AB",
+    domain: "digitalmarketing.se",
+  },
+  {
+    name: "Organic Foods AS",
+    domain: "organicfoods.no",
+  },
+  {
+    name: "Next Generation Tech AB",
+    domain: "nextgenerationtech.se",
+  },
+];
+const femaleNames = [
+  "Astrid",
+  "Birgit",
+  "Caroline",
+  "Dagny",
+  "Elin",
+  "Frida",
+  "Greta",
+  "Hedvig",
+  "Ingrid",
+  "Johanna",
+  "Karin",
+  "Lena",
+  "Maja",
+  "Nina",
+  "Olga",
+  "Petra",
+  "Qarin",
+  "Rakel",
+  "Sanna",
+  "Tove",
+  "Ulrika",
+  "Vendela",
+  "Wilhelmina",
+  "Xenia",
+  "Ylva",
+  "Zara",
+  "Åsa",
+  "Älva",
+  "Örjan",
+  "Ada",
+  "Beatrice",
+  "Cecilia",
+  "Diana",
+  "Emilia",
+  "Felicia",
+  "Gabriella",
+  "Hanna",
+  "Ida",
+  "Josefine",
+  "Klara",
+  "Lina",
+  "Matilda",
+  "Natalia",
+  "Othilia",
+  "Paulina",
+  "Quinn",
+  "Rebecca",
+  "Sofia",
+  "Therese",
+  "Ulla",
+  "Vera",
+  "Wanda",
+  "Xanthe",
+  "Ylvi",
+  "Zelda",
+  "Åse",
+  "Älise",
+  "Örla",
+  "Aina",
+  "Berit",
+  "Camilla",
+  "Dorothea",
+  "Ebba",
+  "Fanny",
+  "Gerd",
+  "Hedda",
+  "Inga",
+  "Jennie",
+  "Kirsten",
+  "Liselotte",
+  "Malin",
+  "Nora",
+  "Oda",
+  "Pernilla",
+  "Qristina",
+  "Ronja",
+  "Saga",
+  "Sigrid",
+  "Tilda",
+  "Una",
+  "Vigdis",
+  "Wilma",
+  "Xandra",
+  "Yvonne",
+  "Zillah",
+  "Åsta",
+  "Änna",
+  "Ödeborg",
+  "Amalie",
+  "Blenda",
+];
+const maleNames = [
+  "Anders",
+  "Bjorn",
+  "Casper",
+  "Dag",
+  "Einar",
+  "Felix",
+  "Gunnar",
+  "Hans",
+  "Ingvar",
+  "Jens",
+  "Karl",
+  "Lars",
+  "Mikael",
+  "Nils",
+  "Ola",
+  "Per",
+  "Quentin",
+  "Rune",
+  "Sven",
+  "Thor",
+  "Ulrik",
+  "Vidar",
+  "Wilhelm",
+  "Yngve",
+  "Zacharias",
+  "Åke",
+  "Ärvid",
+  "Örjan",
+  "Albin",
+  "Bertil",
+  "Carl",
+  "David",
+  "Erik",
+  "Filip",
+  "Gustav",
+  "Hampus",
+  "Isak",
+  "Johan",
+  "Knut",
+  "Leif",
+  "Mats",
+  "Niklas",
+  "Oskar",
+  "Patrik",
+  "Rasmus",
+  "Svante",
+  "Tomas",
+  "Urban",
+  "Valdemar",
+  "William",
+  "Xander",
+  "Ymer",
+  "Zebastian",
+  "Adam",
+  "Bjarte",
+  "Cato",
+  "Dan",
+  "Eivind",
+  "Fredrik",
+  "Geir",
+  "Håkon",
+  "Inge",
+  "Jonas",
+  "Kenneth",
+  "Lasse",
+  "Magnus",
+  "Nikolai",
+  "Odd",
+  "Peder",
+  "Qvintus",
+  "Ragnar",
+  "Sigurd",
+  "Torbjorn",
+  "Ulf",
+  "Viggo",
+  "Widar",
+  "Xerxes",
+  "Yngvar",
+  "Ziggy",
+  "Øystein",
+  "Åsmund",
+  "Älgar",
+  "Öjvind",
+  "Aksel",
+  "Bendik",
+  "Christoffer",
+  "Dennis",
+  "Emil",
+  "Frode",
+  "Gabriel",
+  "Halvard",
+  "Ivar",
+  "Jørgen",
+  "Kaj",
+  "Ludvig",
+  "Marius",
+  "Nicolay",
+  "Ole",
+  "Pål",
+  "Rolf",
+  "Steffen",
+  "Tore",
+  "Ulrikke",
+  "Vidar",
+  "William",
+  "Xander",
+  "Yngve",
+  "Zacharias",
+];
+const surnames = [
+  "Andersen",
+  "Berg",
+  "Christensen",
+  "Dahl",
+  "Eriksson",
+  "Falk",
+  "Gustafsson",
+  "Hansen",
+  "Iversen",
+  "Jensen",
+  "Karlsson",
+  "Lind",
+  "Madsen",
+  "Nelson",
+  "Olsen",
+  "Pettersson",
+  "Quist",
+  "Rasmussen",
+  "Svensson",
+  "Thorsen",
+  "Ulvsson",
+  "Vik",
+  "Wikström",
+  "Ytterberg",
+  "Zakariassen",
+  "Åberg",
+  "Älvgren",
+  "Öberg",
+  "Ahlgren",
+  "Björk",
+  "Carlsson",
+  "Dahlberg",
+  "Eklund",
+  "Forsberg",
+  "Gunnarsson",
+  "Holm",
+  "Isaksson",
+  "Jansson",
+  "Kvist",
+  "Larsson",
+  "Månsson",
+  "Nilsson",
+  "Olofsson",
+  "Persson",
+  "Rosenberg",
+  "Sundberg",
+  "Törnqvist",
+  "Ullberg",
+  "Vallgren",
+  "Wahlberg",
+  "Xenophontos",
+  "Yngvesson",
+  "Zachrisson",
+  "Ødegård",
+  "Åkesson",
+  "Äng",
+  "Öhman",
+  "Aronsson",
+  "Bäck",
+  "Christiansen",
+  "Dahlgren",
+  "Engström",
+  "Fransson",
+  "Gustavsen",
+  "Hedberg",
+  "Isaksen",
+  "Johansen",
+  "Karlström",
+  "Lindberg",
+  "Magnusson",
+  "Norberg",
+  "Olsson",
+  "Petersen",
+  "Rönnqvist",
+  "Sundström",
+  "Tuvesson",
+  "Ulfsdotter",
+  "Vestergaard",
+  "Westerberg",
+  "Yttling",
+  "Zakariasen",
+  "Østergaard",
+  "Åslund",
+  "Ärlebäck",
+  "Östlund",
+  "Andersson",
+  "Blomqvist",
+  "Dahlström",
+  "Ekström",
+  "Fredriksson",
+  "Gustavsson",
+  "Hellström",
+  "Jakobsen",
+  "Karlberg",
+  "Lindström",
+  "Malm",
+  "Nyberg",
+  "Oskarsson",
+  "Petterson",
+  "Runeberg",
+  "Söderberg",
+  "Tranberg",
+  "Ulrich",
+  "Viklund",
+  "Wallin",
+  "Xiao",
+  "Ytterström",
+  "Zetterberg",
+];
+function generateName(
+  femaleName: boolean,
+  maleName: boolean,
+  surName: boolean
+) {
+  const maleOrFemale = Math.floor(Math.random() * 2);
 
-function onFindAllNodesCountPromise() {
-  return new Promise<any[]>((resolve) => {
-    let totalAmount = 0;
-    const nodes: any[] = [];
-    function visit(node: any) {
-      var singleNode = nodes.find((n) => n.type === node.type);
-      totalAmount += 1;
-      if (singleNode) {
-        singleNode.amount += 1;
-      } else {
-        nodes.push({
-          type: node.type,
-          amount: 1 + (singleNode?.amount || 0),
-        });
-      }
-      if (node.children) node.children.forEach(visit);
-    }
-    visit(figma.root);
-    nodes.push({
-      type: "TOTAL",
-      amount: totalAmount,
-    });
-    resolve(nodes);
-  });
-}
-function onFindAllNewNodes(nodes: any[]) {
-  return new Promise<any[]>((resolve) => {
-    nodes.map((node) => {
-      const nodePrev = allNodes.find((n) => n.type === node.type);
-      if (nodePrev) {
-        node.amount = node.amount - nodePrev.amount;
-        if (node.amount < 0) {
-          node.amount = 0;
-        }
-      }
-      return node;
-    });
-    resolve(nodes);
-  });
-}
+  var name = "";
 
-const onFindAllNewNodesAndSendToUi = async () => {
-  let nodes: any[] = await onFindAllNodesCountPromise();
-  nodes = await onFindAllNewNodes(nodes);
-  return nodes;
-};
-
-const onChange = async () => {
-  let newNodes = await onFindAllNewNodesAndSendToUi();
-  figma.ui.postMessage({ newNodes, allNodes, hasUnsyncedData: true });
-  clearTimeout(debouncer);
-  debouncer = setTimeout(async () => {
-    await onSyncDataToCloud(newNodes);
-  }, 10000);
-};
-
-const onSyncDataToCloud = async (newNodes: any[]) => {
-  figma.ui.postMessage({ newNodes, allNodes, hasUnsyncedData: false });
-  return await fetch("http://localhost:5555/v1/stats/create", {
-    method: "POST",
-    body: JSON.stringify({ data: newNodes, figmaRootName: figma.root.name }),
-    headers: {
-      "Content-Type": "application/json",
-      Authorization:
-        "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRvbW15QHRvbW15amVwc2VuLmNvbSIsInBhc3N3b3JkIjoiIiwiY3JlYXRlZEF0IjoiMjAyMy0wNC0xMlQxODo0MTo0NC45NTBaIiwiYXV0aFR5cGUiOiJlbWFpbHB3IiwidXNlckltYWdlIjpudWxsLCJmaXJzdE5hbWUiOm51bGwsImxhc3ROYW1lIjpudWxsLCJvYXV0aElkIjpudWxsLCJzZWxlY3RlZENvbXBhbnlJZCI6ImE4MjgwMjcwLTEzOGYtNGIxZi1hNjNlLTUwMDAzZmYyZTdlZCIsImlkIjoiNTE1NzJlZTMtMWExZS00OTJmLWJjMGItYTJmMjU0MDA2MzU2IiwiaXNBY3RpdmUiOjEsImxhc3RMb2dpbiI6IjIwMjMtMDQtMTJUMTY6NDE6NDAuMzAzWiIsImlhdCI6MTY4MTMyNDkwNCwiZXhwIjoxNjgzOTE2OTA0fQ.4VuX2CCVoVv6QtsJS5-sAjRLUhuF0Qy8SUtrnoQeWRA",
-      companyid: "a8280270-138f-4b1f-a63e-50003ff2e7ed",
-    },
-  });
-};
-
-//Create
-const onUserCreateAcc = async (
-  email: string,
-  password: string,
-  companyName: string
-) => {
-  const fe = await fetch("http://localhost:5555/v1/users/create", {
-    method: "POST",
-    body: JSON.stringify({ email, password, companyName }),
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  const data = await fe.json();
-  console.log("data", data);
-
-  await figma.clientStorage.setAsync("data", data);
-  await figma.clientStorage.setAsync("token", data.token);
-  await figma.clientStorage.setAsync("companyId", data.company.id);
-  return data;
-};
-
-//Create
-const onSignIn = async (email: string, password: string) => {
-  const fe = await fetch("http://localhost:5555/v1/users/login", {
-    method: "POST",
-    body: JSON.stringify({ email, password }),
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  const data = await fe.json();
-  console.log("data", data);
-
-  await figma.clientStorage.setAsync("data", data);
-  await figma.clientStorage.setAsync("token", data.token);
-  await figma.clientStorage.setAsync("companyId", data.company.id);
-  return data;
-};
-
-//Sign out
-const onSignOut = async () => {
-  await figma.clientStorage.deleteAsync("data");
-  await figma.clientStorage.deleteAsync("token");
-  await figma.clientStorage.deleteAsync("companyId");
-  figma.notify("Signed out!");
-  figma.ui.postMessage({ token: "invalid" });
-};
-
-figma.on("documentchange", async () => {
-  if (isStarted) {
-    onChange();
+  if (
+    (!maleName && femaleName) ||
+    (maleName && femaleName && maleOrFemale === 1)
+  ) {
+    name = femaleNames[Math.floor(Math.random() * (femaleNames.length - 1))];
   }
-});
+  if (
+    (maleName && !femaleName) ||
+    (maleName && femaleName && maleOrFemale === 0)
+  ) {
+    if (name) {
+      name += " ";
+    }
+    name += maleNames[Math.floor(Math.random() * (maleNames.length - 1))];
+  }
+  if (surName) {
+    if (name) {
+      name += " ";
+    }
+    name += surnames[Math.floor(Math.random() * (surnames.length - 1))];
+  }
+
+  return name;
+}
+
+function createEmail(element: TextNode, company: any) {
+  const text = figma.createText();
+  text.y = element.y;
+  text.x = element.x + 200;
+  text.fills = element.fills;
+  text.fontSize = element.fontSize;
+  text.characters =
+    element.characters.replace(/\s+/g, ".").toLowerCase() +
+    "@" +
+    company.domain;
+}
+function createCompany(element: TextNode, company: any) {
+  const text = figma.createText();
+  text.y = element.y;
+  text.x = element.x + 500;
+  text.fills = element.fills;
+  text.fontSize = element.fontSize;
+  text.characters = company.name;
+}
+async function createNames(y: number, name: string) {
+  await figma.loadFontAsync({ family: "Inter", style: "Regular" });
+  const text = figma.createText();
+  text.y = y;
+  text.x = 0;
+  text.fills = [
+    {
+      type: "SOLID",
+      color: {
+        r: 1, // Red: 1
+        g: 1, // Green: 1
+        b: 1, // Blue: 1
+      },
+      opacity: 1,
+    },
+  ];
+
+  text.characters = name;
+  figma.currentPage.appendChild(text);
+}
 
 figma.ui.onmessage = async (params) => {
-  console.log(params);
-  if (params.msg === "start") {
-    allNodes = await onFindAllNodesCountPromise();
-    figma.ui.postMessage({ newNodes: [], allNodes, hasUnsyncedData: false });
-
-    isStarted = !isStarted;
-    if (isStarted) {
-      figma.notify("Started");
+  if (params.msg == "createNames") {
+    const viewportCenter = figma.viewport.center;
+    var x = viewportCenter.x;
+    var y = viewportCenter.y;
+    for (let i = 0; i < params.createNamesNo; i++) {
+      await createNames(
+        y,
+        generateName(params.femaleName, params.maleName, params.surName)
+      );
+      y = y + 30;
     }
-  }
-  if (params.msg === "onsync") {
-    let newNodes = await onFindAllNewNodesAndSendToUi();
-    await onSyncDataToCloud(newNodes);
-    clearTimeout(debouncer);
-  }
-  if (params.msg === "sign_out") {
-    await onSignOut();
+    return;
   }
 
-  if (params.msg === "create_account") {
-    console.log("create_account");
-    const userData = await onUserCreateAcc(
-      params.email,
-      params.password,
-      params.companyName
+  if (figma.currentPage.selection.length === 0) {
+    return figma.notify(
+      "No text selected. Please select at least one text layer.",
+      {
+        timeout: 5000,
+        button: {
+          text: "Ok, I'll do that",
+          action: () => {}
+        }
+      }
     );
-    token = await figma.clientStorage.getAsync("token");
-    if (token) {
-      figma.ui.postMessage({ token });
+  }
+  figma.currentPage.selection.map(async (element) => {
+    if (element.type === "TEXT") {
+      await figma.loadFontAsync(element.fontName as FontName);
+    } else {
+      return element;
     }
-    figma.notify("Your account has been created");
-  }
-  if (params.msg === "sign_in") {
-    console.log("signin");
-    await onSignIn(params.email, params.password);
-    token = await figma.clientStorage.getAsync("token");
-    if (token) {
-      figma.ui.postMessage({ token });
+    if (params.msg == "generateNames") {
+      element.characters = generateName(
+        params.femaleName,
+        params.maleName,
+        params.surName
+      );
     }
-    figma.notify("Your are now signed in");
-  }
-  if (params.msg === "get_user_data") {
-    token = await figma.clientStorage.getAsync("token");
-    console.log(token);
-    figma.ui.postMessage({ token });
-  }
+
+    if (params.msg == "generateEmails") {
+      const company =
+        companies[Math.floor(Math.random() * (companies.length - 1))];
+      createEmail(element, company);
+    }
+    if (params.msg == "generateEmailsAndCompany") {
+      const company =
+        companies[Math.floor(Math.random() * (companies.length - 1))];
+      createEmail(element, company);
+      createCompany(element, company);
+    }
+
+    return element;
+  });
 };
