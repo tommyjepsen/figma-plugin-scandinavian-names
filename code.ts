@@ -490,6 +490,11 @@ function createEmail(element: TextNode, company: any) {
     element.characters.replace(/\s+/g, ".").toLowerCase() +
     "@" +
     company.domain;
+  if (element.parent?.type === "FRAME") {
+    element.parent.appendChild(text);
+  } else {
+    figma.currentPage.appendChild(text);
+  }
 }
 function createCompany(element: TextNode, company: any) {
   const text = figma.createText();
@@ -498,6 +503,11 @@ function createCompany(element: TextNode, company: any) {
   text.fills = element.fills;
   text.fontSize = element.fontSize;
   text.characters = company.name;
+  if (element.parent?.type === "FRAME") {
+    element.parent.appendChild(text);
+  } else {
+    figma.currentPage.appendChild(text);
+  }
 }
 async function createNames(y: number, name: string) {
   await figma.loadFontAsync({ family: "Inter", style: "Regular" });
@@ -517,7 +527,12 @@ async function createNames(y: number, name: string) {
   ];
 
   text.characters = name;
-  figma.currentPage.appendChild(text);
+  const figmaSelected = figma.currentPage.selection;
+  if (figmaSelected[0].parent?.type === "FRAME") {
+    figmaSelected[0].parent.appendChild(text);
+  } else {
+    figma.currentPage.appendChild(text);
+  }
 }
 
 figma.ui.onmessage = async (params) => {
@@ -542,8 +557,8 @@ figma.ui.onmessage = async (params) => {
         timeout: 5000,
         button: {
           text: "Ok, I'll do that",
-          action: () => {}
-        }
+          action: () => {},
+        },
       }
     );
   }
